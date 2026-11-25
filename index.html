@@ -61,6 +61,16 @@ a{color:inherit}
 .open b{font-family:"Barlow Semi Condensed",sans-serif;font-size:18px;color:var(--ink);white-space:nowrap}
 .open span{color:var(--mute);font-weight:400;font-size:13px}
 .empty{color:var(--mute)}
+.intern{border-bottom:1px solid var(--rule);background:linear-gradient(180deg,#141a1d,var(--bg))}
+.intern .bar p{max-width:60ch}
+.igrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(18px,3vw,40px);align-items:center}
+.iscreen{border:1px solid var(--rule)}
+.ilede p{margin:0 0 12px;color:var(--mute)}.ilede ul{margin:0;padding-left:20px}.ilede li{margin:5px 0}
+.boards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}
+.board{background:var(--panel);border:1px solid var(--rule);padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.board p{margin:0;color:var(--mute);font-size:15.5px}.board p b{color:var(--ink);font-weight:600}
+.rat{display:flex;flex-wrap:wrap;gap:6px}.rat span{font:600 14px "Barlow Semi Condensed",sans-serif;border:1px solid #3a4448;padding:2px 8px;white-space:nowrap}
+@media(max-width:900px){.igrid,.boards{grid-template-columns:1fr}}
 /* project view */
 .view{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;display:none}
 .view.on{display:block}
@@ -137,6 +147,22 @@ a{color:inherit}
 </header>
 
 <main>
+<section class="band intern" id="internship">
+ <div class="wrap">
+  <div class="bar"><h2>Internship: Aus Coast Energy</h2><p>Electrical Engineering Intern · Canning Vale, WA · Nov 2026 – now · 450-hour placement</p></div>
+  <div class="igrid">
+   <div class="screen iscreen" id="msb"></div>
+   <div class="ilede"><p>Aus Coast Energy designs and builds switchboards in Perth: main switchboards, distribution boards, motor control boxes and metering boards for commercial, education and mining projects. I work from each board's drawing set (general arrangement, single line diagram and control schematics) and follow it through to the built and tested board.</p>
+   <ul><li>Reading and cross-checking drawing sets to AS/NZS 61439 and AS/NZS 3000</li><li>CT metering, MCCB settings, MEN links, forms of separation and IP ratings</li><li>Switchboard testing: insulation resistance, continuity, polarity and function tests</li><li>Emergency and external lighting control circuits (timers, contactors, PE cells, time clocks)</li></ul></div>
+  </div>
+  <div class="boards">
+   <article class="board"><div class="code">Board 1 · Site main switchboard</div><h3>Outdoor kiosk for a regional WA site</h3><div class="rat"><span>600 A</span><span>25 kA / 1 s</span><span>IP56</span><span>Horizon Power CT metering</span></div><p>Matched every compartment of the built board to the drawings, and traced how the CT metering works: why the voltage taps are fused and the CT circuits never are.</p><p><b>Flagged 4 inconsistencies in the drawings:</b> a Form 4A vs 2B mismatch, busbar notes rated for about 300 A on a 600 A board, a label naming the wrong utility, and a fuse change not yet in a formal revision.</p></article>
+   <article class="board"><div class="code">Board 2 · Distribution board</div><h3>Pavilion board with energy submetering</h3><div class="rat"><span>400 A</span><span>10 kA / 1 s</span><span>IP42</span><span>Form 2B</span></div><p>Three-section board with lighting, power and mechanical chassis, five CT-connected submeters, a surge diverter, and a circuit for a 110 kW solar inverter.</p><p><b>My part:</b> helped with the drawings and the testing: insulation resistance, continuity, polarity, and function tests of the emergency lighting test timer and the photocell and time-clock lighting controls.</p></article>
+   <article class="board"><div class="code">Board 3 · Building main switchboard</div><h3>Apartment block on Western Power supply</h3><div class="rat"><span>630 A (set 400 A)</span><span>25 kA / 1 s</span><span>IP42</span><span>Form 2</span></div><p>The largest board so far: about 3.2 m wide, with a billing meter for every apartment, fire pump circuits (duty, standby and jockey), lift, EV charger and space for future solar.</p><p>Worked through the Rev B drawing set, including the lighting control schematics with three contactors, override switches and a 120-minute emergency lighting test timer.</p></article>
+  </div>
+  <p class="note">Drawings and photos stay with the company and its clients, so this section describes the work without showing them.</p>
+ </div>
+</section>
 <section class="band" id="projects">
  <div class="wrap">
   <div class="bar"><h2>Projects</h2><p id="count"></p></div>
@@ -148,7 +174,7 @@ a{color:inherit}
  <div class="wrap cols">
   <div>
    <h2>Experience</h2>
-   <div class="row"><div class="w">Nov 2026 – now</div><div><b>Electrical Engineering Intern</b>, Aus Coast Energy, Canning Vale<p>Working at a WA switchboard manufacturer that builds main switchboards, distribution boards, motor control boxes and metering boards for commercial, education and mining projects. Supporting switchboard design documentation and builds to AS/NZS 61439 and AS/NZS 3000, including Western Power-metered building main switchboards (630 A, 25 kA, Form 2, IP42).</p></div></div>
+   <div class="row"><div class="w">Nov 2026 – now</div><div><b>Electrical Engineering Intern</b>, Aus Coast Energy, Canning Vale<p>Working at a WA switchboard manufacturer that builds main switchboards, distribution boards, motor control boxes and metering boards for commercial, education and mining projects. Reading and checking drawing sets, and helping test boards to AS/NZS 61439 and AS/NZS 3000. <a href="#internship">See what I've worked on</a>.</p></div></div>
    <div class="row"><div class="w">1 year</div><div><b>Assistant Power House Operator</b>, Saria Amanat Khan Power House, India<p>Monitored generators, transformers and plant electrical systems in a live generation plant. Kept hourly operating logs, did routine inspections and preventive maintenance checks, and reported faults to engineers during shift work.</p></div></div>
    <div class="row"><div class="w">Trade training</div><div><b>ITI electrician training</b>, India<p>Wiring, terminations, reading wiring diagrams, testing and electrical safety.</p></div></div>
    <div class="row"><div class="w">Perth</div><div><b>Retail team member</b>, Spudshed, Morley<p>Reliability, customer service and teamwork in a busy store.</p></div></div>
@@ -358,7 +384,7 @@ const drawSld=()=>{
 };
 const ro=new ResizeObserver(drawSld);ro.observe(fig);
 document.getElementById('copy').addEventListener('click',async e=>{try{await navigator.clipboard.writeText('gurkaran21052003@gmail.com');e.target.textContent='Email copied'}catch(_){e.target.textContent='gurkaran21052003@gmail.com'}});
-render();route();
+document.getElementById('msb').innerHTML=A('msb');io.observe(document.getElementById('msb'));render();route();
 }
 </script>
 </body>

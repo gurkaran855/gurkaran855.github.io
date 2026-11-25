@@ -87,6 +87,18 @@ tune(){ // ZN vs Cohen-Coon vs IMC on setpoint step then disturbance
  <line x1="208" y1="24" x2="208" y2="156" stroke="#3a4448"/>${T(212,32,'disturbance')}
  ${T(44,13,'Twin air pressure: 40 → 50%')}
  <rect x="230" y="128" width="6" height="6" fill="#ff6a55"/>${T(240,134,'IMC')}<rect x="230" y="140" width="6" height="6" fill="#a9b4b9"/>${T(240,146,'Cohen-Coon')}<rect x="230" y="152" width="6" height="6" fill="#6f7b81"/>${T(240,158,'Ziegler-Nichols')}`;},
+msb(){ // building main switchboard: supply, CT metering, main switch, busbar, outgoing MCCBs
+ const brk=(x)=>`<rect x="${x-7}" y="112" width="14" height="20" rx="2" fill="#202629" stroke="#8e9aa1"/><path d="M${x} 104 V112 M${x} 132 V160" stroke="#8e9aa1" stroke-width="1.6"/>`;
+ const xs=[80,130,180,230,280];
+ return `<path d="M20 30 H60" ${L}/>${T(20,22,'415 V supply')}
+ ${[0,1,2].map(i=>`<circle cx="${70+i*14}" cy="30" r="6" fill="none" stroke="#ffb14a"><animate attributeName="stroke-opacity" values="1;.3;1" dur="1.2s" begin="${i*.2}s" repeatCount="indefinite"/></circle>`).join('')}${T(64,50,'CT metering')}
+ <path d="M104 30 H130" ${L}/><rect x="130" y="20" width="26" height="20" rx="2" fill="#202629" stroke="#dfe5e8"/>${T(143,54,'Main switch','middle')}
+ <path d="M156 30 H180 V60" ${L}/><rect x="252" y="16" width="44" height="22" rx="2" fill="#202629" stroke="#5c676d"/><text x="274" y="31" text-anchor="middle" font-size="10" fill="#5fd38d" font-family="Source Sans 3,sans-serif">kWh<animate attributeName="opacity" values="1;.4;1" dur="2s" repeatCount="indefinite"/></text>
+ <line x1="60" y1="64" x2="300" y2="64" stroke="#dfe5e8" stroke-width="5"/><line x1="60" y1="72" x2="300" y2="72" stroke="#ffb14a" stroke-width="2"/><line x1="60" y1="78" x2="300" y2="78" stroke="#8ec5ff" stroke-width="2"/>
+ ${T(300,92,'busbars L1 L2 L3','end')}
+ ${xs.map(x=>`<path d="M${x} 64 V104" stroke="#8e9aa1" stroke-width="1.6"/>`+brk(x)).join('')}
+ ${flow('M20 30 H180 V64 H80 V160',3.2,3)}${flow('M180 64 H280 V160',2.6,2)}${flow('M180 64 V160',2.2,2)}
+ ${T(80,174,'Fire pumps','middle')}${T(130,174,'Units','middle')}${T(180,174,'Common','middle')}${T(230,174,'Lift / EV','middle')}${T(280,174,'Future PV','middle')}`;},
 tank(){ // nonlinear tank with PI
  return `<rect x="40" y="40" width="70" height="110" rx="3" fill="#1b2124" stroke="#8e9aa1"/>
  <rect x="42" width="66" fill="#4aa3e0" opacity=".85"><animate attributeName="height" values="40;40;75;75;40" keyTimes="0;.1;.45;.6;1" dur="8s" calcMode="spline" keySplines="0 0 1 1;.2 .8 .3 1;0 0 1 1;.4 0 .6 1" repeatCount="indefinite"/><animate attributeName="y" values="108;108;73;73;108" keyTimes="0;.1;.45;.6;1" dur="8s" calcMode="spline" keySplines="0 0 1 1;.2 .8 .3 1;0 0 1 1;.4 0 .6 1" repeatCount="indefinite"/></rect>
