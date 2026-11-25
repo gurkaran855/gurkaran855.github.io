@@ -336,7 +336,7 @@ const io=new IntersectionObserver(es=>{for(const e of es){const s=e.target.query
 const render=()=>{
  const L=list();
  count.textContent=`${L.length} of ${P.length} shown`;
- grid.innerHTML=L.length?L.map(p=>`<a class="card" href="#${p.id}" data-id="${p.id}"><div class="screen">${p.video?`<video src="${esc(p.video)}" poster="${esc(p.poster)}" muted loop playsinline autoplay preload="metadata" aria-label="Video of the real gantry in the lab"></video><span class="live">Real footage</span>`:A(p.anim)}</div><div class="body"><div class="code">${esc(p.code)}${p.team?`<span class="team">${esc(p.team)}</span>`:''}</div><h3>${esc(p.t)}</h3><p>${esc(first(p.d))}</p><div class="open"><span><b>${esc(p.f[0][0])}</b> ${esc(p.f[0][1])}</span><span aria-hidden="true" style="white-space:nowrap">Open →</span></div></div></a>`).join(''):'<p class="empty">No projects in this area yet.</p>';
+ grid.innerHTML=L.length?L.map(p=>`<a class="card" href="#${p.id}" data-id="${p.id}"><div class="screen">${A(p.anim)}</div><div class="body"><div class="code">${esc(p.code)}${p.team?`<span class="team">${esc(p.team)}</span>`:''}</div><h3>${esc(p.t)}</h3><p>${esc(first(p.d))}</p><div class="open"><span><b>${esc(p.f[0][0])}</b> ${esc(p.f[0][1])}</span><span aria-hidden="true" style="white-space:nowrap">Open →</span></div></div></a>`).join(''):'<p class="empty">No projects in this area yet.</p>';
  for(const b of feeds.children)b.setAttribute('aria-pressed',b.dataset.id===cur);
  grid.querySelectorAll('.screen').forEach(s=>io.observe(s));
  drawSld();
