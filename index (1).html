@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Engineering portfolio of Gurkaran Singh, final-year electrical engineering student at Murdoch University: power systems, PLC and SCADA, process control, power electronics, solar and switchboards.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gurkaran855.github.io/">
+<meta property="og:title" content="Gurkaran Singh – Engineering Portfolio">
+<meta property="og:description" content="16 projects in power systems, protection, power electronics, PLC/SCADA, process control and solar, plus a switchboard internship at Aus Coast Energy.">
+<meta property="og:image" content="https://gurkaran855.github.io/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gurkaran855.github.io/og.jpg">
+<link rel="icon" href="me.jpg">
+<title>Gurkaran Singh – Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a control room at night, calm and exact
+   IDEA: every project is a live instrument screen; open one and it fills the room
+   PICTURE: animated schematics (power flowing, rotors swinging, tanks filling) on dark screens; the hero is a live single-line diagram
+   COLOUR and TYPE: graphite room, pale ink, one signal red; Barlow Semi Condensed + Source Sans 3
+   LAYOUT: name and title block, live SLD with feeders as filters, grid of live screens, full-screen project view, experience, contact */
+:root{color-scheme:dark;--bg:#0f1214;--panel:#161b1e;--screen:#12171a;--ink:#e8ecee;--mute:#9aa5ab;--rule:#262e33;--line:#8e9aa1;--red:#ff5a45;--ok:#5fd38d}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.6 "Source Sans 3",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Barlow Semi Condensed",system-ui,sans-serif;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(42px,6.4vw,52px);font-weight:700}
+h2{font-size:clamp(28px,3.4vw,34px);font-weight:600;margin-bottom:18px}
+h3{font-size:22px;font-weight:600}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.top{border-bottom:1px solid var(--rule);background:radial-gradient(120% 80% at 80% 0%,#1b2226 0%,var(--bg) 60%)}
+.head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
+.who{display:flex;gap:22px;align-items:center}.me{width:120px;height:120px;border-radius:50%;object-fit:cover;border:2px solid var(--line);flex:none}
+.lede{font-size:18px;max-width:62ch;margin:14px 0 0;color:var(--mute)}
+.tb{border:1.5px solid var(--line);display:grid;grid-template-columns:auto auto;font-size:14px;background:var(--panel)}
+.tb div{padding:6px 12px;border-bottom:1px solid var(--rule)}
+.tb div:nth-child(odd){color:var(--mute);border-right:1px solid var(--rule)}
+.tb div:nth-last-child(-n+2){border-bottom:0}
+.sld{margin-top:28px}
+.fig{position:relative;height:190px}
+.fig svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.feeds{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:4px}
+.feed{font:600 15px/1.2 "Barlow Semi Condensed",sans-serif;min-height:44px;padding:8px 6px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;border-radius:2px}
+.feed span{display:block;font:400 13px "Source Sans 3",sans-serif;color:var(--mute)}
+.feed[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
+.feed[aria-pressed=true] span{color:#fff}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:600 15px "Source Sans 3",sans-serif;cursor:pointer;text-decoration:none;border-radius:2px}
+.btn.solid{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 20px;margin-bottom:18px}
+.bar p{margin:0;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:18px}
+.card{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--rule);text-decoration:none;color:inherit;transition:transform .25s,border-color .25s}
+.card:hover{transform:translateY(-3px);border-color:#46525a}
+.screen{position:relative;background:var(--screen);aspect-ratio:16/9;border-bottom:1px solid var(--rule);overflow:hidden;background-image:linear-gradient(#ffffff06 1px,transparent 1px),linear-gradient(90deg,#ffffff06 1px,transparent 1px);background-size:20px 20px}
+.screen video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.live{position:absolute;left:8px;top:8px;background:#ff5a45;color:#fff;font-size:12px;font-weight:600;padding:2px 8px;border-radius:2px}
+.vvid{max-width:1240px;margin:16px auto 0}.vvid video{width:100%;display:block;border:1px solid var(--rule);max-height:62vh;background:#000}.vvid span{display:block;color:var(--mute);font-size:13px;margin-top:4px}
+.screen svg{position:absolute;inset:0;width:100%;height:100%}
+.screen .tag{position:absolute;left:8px;bottom:6px;font-size:11px;color:#6d787e}
+.body{padding:16px 20px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.code{font:600 14px "Barlow Semi Condensed",sans-serif;color:var(--red)}
+.body p{margin:0;color:var(--mute);font-size:15.5px}
+.open{margin-top:auto;padding-top:8px;font-weight:600;font-size:15px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--rule)}
+.open b{font-family:"Barlow Semi Condensed",sans-serif;font-size:18px;color:var(--ink);white-space:nowrap}
+.open span{color:var(--mute);font-weight:400;font-size:13px}
+.empty{color:var(--mute)}
+.intern{border-bottom:1px solid var(--rule);background:linear-gradient(180deg,#141a1d,var(--bg))}
+.intern .bar p{max-width:60ch}
+.igrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(18px,3vw,40px);align-items:center}
+.iscreen{border:1px solid var(--rule)}
+.ilede p{margin:0 0 12px;color:var(--mute)}.ilede ul{margin:0;padding-left:20px}.ilede li{margin:5px 0}
+.boards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}
+.board{background:var(--panel);border:1px solid var(--rule);padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.board p{margin:0;color:var(--mute);font-size:15.5px}.board p b{color:var(--ink);font-weight:600}
+.rat{display:flex;flex-wrap:wrap;gap:6px}.rat span{font:600 14px "Barlow Semi Condensed",sans-serif;border:1px solid #3a4448;padding:2px 8px;white-space:nowrap}
+@media(max-width:900px){.igrid,.boards{grid-template-columns:1fr}}
+/* project view */
+.view{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;display:none}
+.view.on{display:block}
+.vbar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px max(5vw,16px);background:#0f1214e6;backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+.vbar .nav{display:flex;gap:8px}
+.vscreen{position:relative;max-width:1240px;margin:0 auto;aspect-ratio:16/9;max-height:62vh;background:var(--screen);border:1px solid var(--rule);background-image:linear-gradient(#ffffff06 1px,transparent 1px),linear-gradient(90deg,#ffffff06 1px,transparent 1px);background-size:24px 24px}
+.vscreen svg{position:absolute;inset:0;width:100%;height:100%}
+.vwrap{max-width:1240px;margin:0 auto;padding:22px max(5vw,16px) 60px}
+.vhead{max-width:860px}
+.vhead h2{font-size:clamp(30px,4vw,44px);margin:6px 0 12px}
+.vhead p{color:var(--mute);font-size:18px;margin:0}
+.vcols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(20px,4vw,48px);margin-top:28px}
+.vcols ul{margin:0;padding-left:20px}
+.vcols li{margin:6px 0}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.fact{background:var(--panel);border:1px solid var(--rule);padding:14px}
+.fact b{display:block;font:600 clamp(24px,3vw,30px)/1.1 "Barlow Semi Condensed",sans-serif;white-space:nowrap}
+.fact span{color:var(--mute);font-size:14px}
+.real{margin:0;background:#fff;border:1px solid var(--rule)}
+.real img{display:block;width:100%;height:auto}
+.real figcaption{background:var(--panel);color:var(--mute);font-size:13px;padding:6px 10px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag2{font-size:13px;padding:2px 8px;border:1px solid var(--rule);white-space:nowrap;color:var(--mute)}
+.team{display:inline-block;margin-left:8px;color:var(--mute);font-weight:400}
+.note{font-size:13px;color:#6d787e;margin-top:10px}
+/* lower sections */
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,4vw,56px)}
+.row{display:grid;grid-template-columns:9em minmax(0,1fr);gap:14px;padding:14px 0;border-top:1px solid var(--rule)}
+.row:last-child{border-bottom:1px solid var(--rule)}
+.row .w{color:var(--mute);font-size:15px}
+.row p{margin:4px 0 0;color:var(--mute)}
+.skills{display:grid;gap:14px}
+.skills h3{font-size:18px;margin-bottom:6px}
+.tag{font-size:13px;padding:2px 8px;border:1px solid var(--rule);white-space:nowrap}
+.contact{background:var(--ink);color:var(--bg)}
+.contact .btn{border-color:var(--bg);color:var(--bg)}
+.contact .btn.solid{background:var(--red);border-color:var(--red);color:#fff}
+.contact p{color:#3b4046;max-width:60ch}
+.band[style]{background:var(--panel)!important;border-color:var(--rule)!important}
+::view-transition-group(hero){animation-duration:.55s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+@media(max-width:900px){.head{grid-template-columns:1fr}.cols,.vcols{grid-template-columns:1fr}}
+@media(max-width:600px){.who{flex-direction:column;align-items:flex-start}.me{width:96px;height:96px}.fig{height:110px}.feeds{grid-template-columns:repeat(2,minmax(0,1fr))}.row{grid-template-columns:1fr;gap:2px}.tb{grid-template-columns:auto minmax(0,1fr)}.vscreen{max-height:none}.facts{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:no-preference){.flow{stroke-dasharray:6 10;animation:f 1.6s linear infinite}@keyframes f{to{stroke-dashoffset:-32}}}
+</style>
+</head>
+<body>
+<header class="top band">
+ <div class="wrap">
+  <div class="head">
+   <div class="who"><img class="me" src="me.jpg" alt="Gurkaran Singh" width="120" height="120"><div>
+    <h1>Gurkaran Singh</h1>
+    <p class="lede">Final-year electrical engineering student at Murdoch University, Perth. I work across the whole chain: transmission and protection studies, power electronics and drives, PLC and SCADA control, solar, and machine learning for agriculture. Open any project to see it run.</p>
+   </div></div>
+   <div class="tb" aria-label="Summary">
+    <div>Degree</div><div>B.Eng (Hons) Renewable &amp; Electrical</div>
+    <div>Minor</div><div>Industrial Control &amp; Automation</div>
+    <div>University</div><div>Murdoch, Jul 2023 – present</div>
+    <div>Based in</div><div>Perth, WA</div>
+    <div>Looking for</div><div>Internship, vacation or part-time role</div>
+   </div>
+  </div>
+  <div class="sld">
+   <div class="fig" id="fig"><svg id="svg" role="img" aria-label="Single-line diagram: a 132 kV supply through a transformer onto a busbar with six feeders, one for each skill area"></svg></div>
+   <div class="feeds" id="feeds"></div>
+  </div>
+  <div class="actions">
+   <a class="btn solid" href="#projects">See projects</a>
+   <a class="btn" href="resume.pdf" target="_blank" rel="noopener">View resume</a>
+   <a class="btn" href="https://www.linkedin.com/in/gurkaran-singh-engineer" target="_blank" rel="noopener">LinkedIn</a>
+   <button class="btn" id="copy" type="button">Copy email</button>
+   <a class="btn" href="#contact">Contact</a>
+  </div>
+ </div>
+</header>
+
+<main>
+<section class="band intern" id="internship">
+ <div class="wrap">
+  <div class="bar"><h2>Internship: Aus Coast Energy</h2><p>Electrical Engineering Intern · Canning Vale, WA · Nov 2026 – now · 450-hour placement</p></div>
+  <div class="igrid">
+   <div class="screen iscreen" id="msb"></div>
+   <div class="ilede"><p>Aus Coast Energy designs and builds switchboards in Perth: main switchboards, distribution boards, motor control boxes and metering boards for commercial, education and mining projects. I work on each board's drawings (general arrangement, single line diagram and control schematics), help assemble and test it in the workshop, and contribute to research and development.</p>
+   <ul><li>Reading and cross-checking drawing sets to AS/NZS 61439 and AS/NZS 3000</li><li>CT metering, MCCB settings, MEN links, forms of separation and IP ratings</li><li>Assembling boards in the workshop alongside the build team</li><li>Switchboard testing: insulation resistance, continuity, polarity and function tests</li><li>Contributing to the company’s research and development work</li><li>Emergency and external lighting control circuits (timers, contactors, PE cells, time clocks)</li></ul></div>
+  </div>
+  <div class="boards">
+   <article class="board"><div class="code">Board 1 · Site main switchboard</div><h3>Outdoor kiosk for a regional WA site</h3><div class="rat"><span>600 A</span><span>25 kA / 1 s</span><span>IP56</span><span>Horizon Power CT metering</span></div><p>Matched every compartment of the built board to the drawings, and traced how the CT metering works: why the voltage taps are fused and the CT circuits never are.</p><p><b>Flagged 4 inconsistencies in the drawings:</b> a Form 4A vs 2B mismatch, busbar notes rated for about 300 A on a 600 A board, a label naming the wrong utility, and a fuse change not yet in a formal revision.</p></article>
+   <article class="board"><div class="code">Board 2 · Distribution board</div><h3>Pavilion board with energy submetering</h3><div class="rat"><span>400 A</span><span>10 kA / 1 s</span><span>IP42</span><span>Form 2B</span></div><p>Three-section board with lighting, power and mechanical chassis, five CT-connected submeters, a surge diverter, and a circuit for a 110 kW solar inverter.</p><p><b>My part:</b> helped with the drawings and the testing: insulation resistance, continuity, polarity, and function tests of the emergency lighting test timer and the photocell and time-clock lighting controls.</p></article>
+   <article class="board"><div class="code">Board 3 · Building main switchboard</div><h3>Apartment block on Western Power supply</h3><div class="rat"><span>630 A (set 400 A)</span><span>25 kA / 1 s</span><span>IP42</span><span>Form 2</span></div><p>The largest board so far: about 3.2 m wide, with a billing meter for every apartment, fire pump circuits (duty, standby and jockey), lift, EV charger and space for future solar.</p><p>Worked through the Rev B drawing set, including the lighting control schematics with three contactors, override switches and a 120-minute emergency lighting test timer.</p></article>
+  </div>
+  <p class="note">Drawings and photos stay with the company and its clients, so this section describes the work without showing them.</p>
+ </div>
+</section>
+<section class="band" id="projects">
+ <div class="wrap">
+  <div class="bar"><h2>Projects</h2><p id="count"></p></div>
+  <div class="grid" id="grid"></div>
+  <p class="note">The moving screens are animated schematics I drew to show how each system behaves. Figures and photos inside each project come from my own reports.</p>
+ </div>
+</section>
+<section class="band" style="background:var(--paper);border-block:1px solid var(--rule)">
+ <div class="wrap cols">
+  <div>
+   <h2>Experience</h2>
+   <div class="row"><div class="w">Nov 2026 – now</div><div><b>Electrical Engineering Intern</b>, Aus Coast Energy, Canning Vale<p>Working at a WA switchboard manufacturer that builds main switchboards, distribution boards, motor control boxes and metering boards for commercial, education and mining projects. Working on drawings, assembly and testing of switchboards to AS/NZS 61439 and AS/NZS 3000, and contributing to R&amp;D. <a href="#internship">See what I've worked on</a>.</p></div></div>
+   <div class="row"><div class="w">1 year</div><div><b>Assistant Power House Operator</b>, Saria Amanat Khan Power House, India<p>Monitored generators, transformers and plant electrical systems in a live generation plant. Kept hourly operating logs, did routine inspections and preventive maintenance checks, and reported faults to engineers during shift work.</p></div></div>
+   <div class="row"><div class="w">Trade training</div><div><b>ITI electrician training</b>, India<p>Wiring, terminations, reading wiring diagrams, testing and electrical safety.</p></div></div>
+   <div class="row"><div class="w">Perth</div><div><b>Retail team member</b>, Spudshed, Morley<p>Reliability, customer service and teamwork in a busy store.</p></div></div>
+   <div class="row"><div class="w">Ongoing</div><div><b>Leadership</b><p>Student mentor, Event Head at the Literary Society, and creator of a YouTube channel that helps students work towards their goals.</p></div></div>
+  </div>
+  <div>
+   <h2>Education</h2>
+   <div class="row"><div class="w">2023 – now</div><div><b>Murdoch University</b>, Perth<p>Bachelor of Engineering (Honours), Renewable and Electrical Engineering, minor in Industrial Control and Automation Engineering.</p></div></div>
+   <div class="row"><div class="w">2020 – 2022</div><div><b>SGHPS</b>, Chabhal, India<p>Senior Secondary (Non-Medical), GPA 9.4 / 10.</p></div></div>
+   <h2 style="margin-top:34px">Skills</h2>
+   <div class="skills" id="skills"></div>
+  </div>
+ </div>
+</section>
+
+<section class="band contact" id="contact">
+ <div class="wrap">
+  <h2>Let's talk</h2>
+  <p>I'm available now for an electrical, power systems or automation internship, vacation program or part-time role in Perth. Résumé and academic record on request.</p>
+  <div class="actions">
+   <a class="btn solid" href="mailto:gurkaran21052003@gmail.com">gurkaran21052003@gmail.com</a>
+   <a class="btn" href="tel:+61431997270">+61 431 997 270</a>
+   <a class="btn" href="https://www.linkedin.com/in/gurkaran-singh-engineer" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+  <p class="note">Languages: English, Hindi, Punjabi.</p>
+ </div>
+</section>
+
+</main>
+
+<section class="view" id="view" aria-modal="true" role="dialog" aria-labelledby="vt">
+ <div class="vbar"><button class="btn" id="close" type="button">← All projects</button><div class="nav"><button class="btn" id="prev" type="button">Previous</button><button class="btn" id="next" type="button">Next</button></div></div>
+ <div class="vwrap" id="vbody"></div>
+</section>
+
+<script src="anims.js"></script>
+<script>
+{
+const P=[
+ {a:'ps',code:'ENG537',t:'132 kV connection for a 40 MW steel mill',img:'steel-mill-n1.jpg',alt:'PowerFactory load-flow heat maps of the 17-bus network before and after the fix for one line outage',
+  d:'Modelled a 17-bus, 132/66 kV transmission network supplying 585 MW and 145 MVAr of urban and rural load, then connected a new 40 MW steel mill at Location H while upgrading the network for 30% load growth.',
+  b:['Designed the new 132 kV line: conductor choice, series impedance and shunt susceptance','Fixed an undervoltage of 0.89 p.u. at Bus 14 with a +5% tap change, a 15 MVAr capacitor and network reinforcement','Screened every single-line outage (N-1): only 4 caused violations, each fixed with the cheapest targeted conductor upgrade','Also covered generator and transformer outages, including upgrading a transformer from 60 to 120 MVA'],
+  f:[['$7.31M','total upgrade cost'],['0.96–1.04 p.u.','all buses, normal and N-1']],
+  tools:['DIgSILENT PowerFactory','Load flow','N-1']},
+ {a:'ps',code:'ENG534 · Part 2',t:'Dynamic stability and protection coordination',img:'cct-stability.jpg',alt:'PowerFactory plots: generator G3 stays stable with a 325 ms fault but slips a pole at 326 ms',team:'Team of 3 (my share: 38%)',
+  d:'Built dynamic generator models and an overcurrent protection scheme for the same network in PowerFactory, then tested fault, generator-trip and protection cases.',
+  b:['Set up excitation, governor and stabiliser models (IEEE DC1A, TGOV1, PSS1A, UEL1, OEL2C) and fixed an unstable baseline by correcting limiter settings and exciter gain','Found the critical clearing time between 325 and 326 ms, judged from rotor speed rather than the wrapped angle plot','Traced a full-network instability to the dispatch: the slack machine was absorbing 117.6 MW. Re-dispatching the battery and faster governor settings gave a stable, well-damped 150 ms fault response','Coordinated ANSI 50/51 overcurrent relays to IEC 60909, reaching a coordination margin of at least 0.3 s on five buses; showed the one remaining bus needs directional (67) or busbar differential (87B) protection'],
+  f:[['325 ms','critical clearing time'],['\u2265 0.3 s','relay coordination margin']],
+  tools:['PowerFactory','Transient stability','Protection','IEC 60909']},
+ {a:'ps',code:'ENG534 · Part 1',t:'Connecting a 200 MW battery to the grid',team:'Team of 3',
+  d:'Assessed connecting a 200 MW battery energy storage system (BESS-2) at Bus 3 of a six-bus transmission network against Western Power\u2019s Technical Rules, in DIgSILENT PowerFactory.',
+  b:['Modelled the battery as a voltage-controlled static generator on its own 33 kV terminal and 132/33 kV transformer','Sized it at 0.9 power factor: \u00b196.8 MVAr and 222.2 MVA minimum, so a 225 MVA inverter and transformer','Found the highest secure load scaling: 242% with the battery in service versus 190% without','Ran N-1 and N-2 studies, then reinforced the network until no thermal or voltage violations remained','Showed energising the battery passed the voltage-step limit (+1.23%), but tripping it at full load did not, and recommended a reactive-power strategy before claiming full compliance'],
+  f:[['242%','secure load with battery (190% without)'],['225 MVA','inverter and transformer rating']],
+  tools:['PowerFactory','BESS','Western Power Technical Rules','N-1 / N-2']},
+ {a:'ps',code:'ENG381',t:'Designing an 8-bus network and checking it in two tools',img:'eng381-powerworld.jpg',alt:'PowerWorld one-line diagram of the 8-bus network with bus voltages and power flows',
+  d:'Sized the generators and lines for a heavily loaded network fed by two 50 MVA generators (11 kV and 6.6 kV) through 132 kV, 33 kV and 11 kV lines, then solved it in both Simulink and PowerWorld.',
+  b:['Calculated line impedance from the allowed voltage drop and chose ACSR conductor, using parallel lines where one was not enough','Ran load flows at different load levels: 97.3% network efficiency and about 0.25% voltage regulation at each generator','Dropped one load to 0.6 power factor, sized a 7.14 MVAr shunt capacitor bank and restored the bus voltages','Rebuilt the network in PowerWorld: bus voltages matched Simulink to within about 0.001 p.u.'],
+  f:[['97.3%','network efficiency'],['7.14 MVAr','capacitor bank sized']],
+  tools:['MATLAB Simscape','PowerWorld','Load flow']},
+ {a:'pe',code:'ENG535',t:'Drive system for a two-axis amusement ride',img:'ride-drive.jpg',alt:'Block diagram of the ride: three-phase supply, IGBT rectifier, DC link, three IGBT H-bridges with cascade PI control driving three DC motors through gearboxes',team:'Group project',
+  d:'Designed and simulated the full power electronic system for a ride with two 8-person cabins on a rotating main platform, fed from a 415 V three-phase supply.',
+  b:['Sized the motors from inertia and the ride profile: 1.601 kW cabin motors (70:1 gearbox) and an 8.414 kW main motor (150:1)','IGBT Active Front End rectifier giving a regulated 650 V DC bus at near-unity power factor','Four-quadrant IGBT H-bridges for reversal and regenerative braking; 180 Ω / 3 kW braking choppers clamp the bus at 700 V','Cascade PI speed and current control, tuned from bandwidth formulas and checked against IEC 60034-1 and IEC 61800-2'],
+  f:[['< 0.15 rpm','speed-tracking error, full ride cycle'],['2.5 s','emergency stop (spec: 5 s)']],
+  tools:['MATLAB Simulink','Simscape Electrical','AFE','IGBT']},
+ {a:'pe',code:'ENG382',t:'High-voltage multi-output rectifier system',team:'Team of 3',
+  d:'Designed a three-stage power electronic circuit that delivers four outputs from one 400 V, 50 Hz three-phase supply, using only a fixed list of permitted diodes and thyristors.',
+  b:['Outputs of 1500 V at 12 kW, a thyristor-controlled 200–2000 V at up to 25 kW, and 2 × 1100 V at 15 kW','Two three-winding transformers feeding 6-pulse bridges; firing angles from 15.4° to 84.5°','Series devices derated to 80%, with balancing resistors and RC snubbers on every arm','Flagged two stages that ran below the 80% derating target, with a documented fix, rather than calling them safe','Follow-on design: a 12-pulse star-delta version that cuts ripple from about 4.2% to about 1%'],
+  f:[['54','semiconductors in total'],['4','outputs from one supply']],
+  tools:['Rectifiers','Thyristors','Simulink']},
+ {a:'auto',code:'ENG392',t:'SCADA control for a water treatment plant',img:'scada-hmi.jpg',alt:'WinCC HMI screen showing four tanks, pumps, pH and chlorine dosing controls',team:'Team of 4',
+  d:'Built the control system for a four-tank water treatment plant on Siemens hardware: an S7-1500 master PLC for supervision, alarms and the HMI, and an S7-1200 slave PLC for the process.',
+  b:['Interlocked pump sequencing for filling and draining, so no pump can run dry','PID control of pH and chlorination with anti-windup, and hysteresis to stop dosing pumps hunting','PLC-to-PLC data over PROFINET with TSEND_C/TRCV_C, plus OPC UA communication','WinCC HMI with live process view and alarm management; a VSD on the distribution pump for energy-efficient flow'],
+  f:[['2','PLCs: S7-1500 + S7-1200'],['4','tanks under automatic control']],
+  tools:['Siemens S7','TIA Portal','WinCC','PROFINET','OPC UA','VSD']},
+ {a:'ctrl',code:'ENG391 · Project 2',t:'Six digital controllers on a real air receiver',img:'controllers.jpg',team:'Team of 3',alt:'Measured step responses of all six controllers on the physical air receiver',
+  d:'Designed six discrete-time controllers for a pressure process (K = 0.7, τ = 9.2 s, θ = 1.5 s, sampled at 0.5 s), then tested every one on the physical rig.',
+  b:['Position PI, velocity PI, direct synthesis, IMC, Dahlin and deadbeat, each derived symbolically, simulated in Simulink and run as difference equations in LabVIEW','Direct synthesis (τr = 4.5 s) performed best: zero overshoot, zero steady-state error and only 0.2% disturbance deviation','Deadbeat gave the fastest rise time on a 30–50% step; Dahlin oscillated on the real plant, so I advised against it without a better model'],
+  f:[['0.2%','disturbance deviation, best controller'],['6 of 6','tested on hardware']],
+  tools:['MATLAB Simulink','LabVIEW','Digital control']},
+ {a:'ctrl',code:'ENG391 · Labs',t:'Process control lab series on real rigs',
+  d:'Six hands-on experiments on the air receiver pressure and flow rig in the ICE Lab, each running my controllers live in LabVIEW and comparing them with Simulink models.',
+  b:['PI and PID tuning: fitted a first-order-plus-dead-time model from an open-loop step test, then tuned and compared four analytical tuning methods on the real rig','Cascade control: designed a fast inner loop and slow outer loop and showed it beat single-loop control','Internal Model Control: designed and ran an IMC-based PI controller from the identified process model','Real-time model: built a live FOPDT simulation in LabVIEW and tuned K and \u03c4 until it tracked the real pressure response','Sampling time: increased the sampling period of a flow loop until it became marginally unstable, matching Simulink predictions','Position vs velocity PID: implemented both discrete forms and compared their responses to a 30\u201350% pressure step'],
+  f:[['6','lab experiments'],['LabVIEW','controllers run on real hardware']],
+  tools:['LabVIEW','MATLAB Simulink','PID tuning','Cascade','IMC']},
+ {a:'ctrl',code:'Process control',t:'PID tuning for a twin air pressure system',
+  d:'Identified a process model from real LabVIEW step-test data on a twin air system, then compared three PID tuning methods in Simulink and on the rig.',
+  b:['Fitted a first-order-plus-dead-time model from the experimental data (K = 2.65, \u03c4 = 14.5 s, dead time 15 s)','Tuned PID controllers with Ziegler-Nichols, Cohen-Coon and IMC, and ran them through LabVIEW\u2019s PID Advanced VI','Tested a setpoint change from 40% to 50% and disturbance rejection at 40%, comparing overshoot, settling time and steady-state error','Checked closed-loop stability three ways: pole locations, root locus and the Routh-Hurwitz criterion','IMC gave the best result: minimal overshoot, faster settling and the strongest disturbance rejection'],
+  f:[['3','tuning methods compared'],['IMC','best performer']],
+  tools:['LabVIEW','MATLAB Simulink','PID tuning','Root locus','Routh-Hurwitz']},
+ {a:'ctrl',code:'ENG391 · Project 1',t:'Nonlinear tank modelling and time-delay control',
+  d:'Modelled a nonlinear liquid-level tank and studied how dead time hurts an air receiver loop, using step tests in LabVIEW and models in Simulink.',
+  b:['Built a nonlinear tank model (A\u00b7dh/dt = F\u1d62 \u2212 c\u221ah) and linearised it at 50% level: K = 3.39, \u03c4 = 1.16 s','Showed the linear model drifts away from reality at 30% (K = 2.44) and 70% (K = 4.19)','Tuned an IMC-based controller that moved the level from 50% to 70% and settled in about 1.3 s','Designed cascade control for the air receiver (inner flow loop, outer pressure loop), which cut overshoot and rejected disturbances better than single-loop control','Added artificial delays of 2, 6 and 10 s to show the loop becoming oscillatory, then implemented a Smith predictor that restored a stable response'],
+  f:[['3','operating points compared'],['10 s','largest delay handled by the Smith predictor']],
+  tools:['LabVIEW','MATLAB Simulink','Cascade','Smith predictor','IMC']},
+ {a:'ren',code:'ENG231',t:'Solar PV performance study: Kalgoorlie Library',img:'kalgoorlie-pv.jpg',alt:'Bar chart of monthly PV production at Kalgoorlie Library in 2025',team:'Team of 3',
+  d:'Assessed a real 20.1 kWp rooftop PV system with a Huawei SUN2000-15KTL-M0 inverter, using a full year (2025) of 5-minute monitoring data.',
+  b:['Checked data quality to AS/NZS 61724.1:2023: 105,039 of 105,120 intervals recorded','Drew the system single-line diagram and analysed monthly production, grid import and export','Built a PVsyst model covering four roof orientations and investigated shading losses'],
+  f:[['1,537 kWh/kWp','measured annual specific yield'],['99.92%','data completeness']],
+  tools:['PVsyst','Solar PV','Data analysis']},
+ {a:'ren',code:'ENG470',t:'Honours thesis: drone-based crop monitoring',img:'thesis-results.jpg',alt:'Bar chart of test accuracy and macro-F1 for the cotton and soybean disease models',
+  d:'Designing, building and evaluating an affordable drone system that uses aerial images and computer vision to map crop health, with results shown in a local web interface.',
+  b:['Trained a ResNet50 model on the COT-AD cotton dataset: 93.9% test accuracy (macro-F1 0.896) across 9 disease and pest classes','Trained a soybean leaf model: 75.9% accuracy, with most errors between three look-alike brown leaf-spot diseases','Adapting a pretrained DINOv2 backbone with self-supervised learning on unlabelled aerial imagery','Pipeline: scheduled flight, upload, offboard analysis, then a report on where problems are'],
+  f:[['93.9%','accuracy, 9-class model'],['DINOv2','self-supervised backbone']],
+  tools:['Python','Computer vision','Google Colab']},
+ {a:'auto',code:'ENG251',t:'PLC-controlled pneumatic gantry (pick and place)',video:'gantry-real.mp4',poster:'gantry-real.jpg',img:'gantry-states.jpg',alt:'State diagram for one stage of the gantry sequence, showing up, down, left and right outputs and the timer and position transitions',
+  d:'Programmed a Siemens S7-1500 (CPU 1512C-1 PN) to run a gantry that finds nylon disks, measures their height and stacks them, using a stepper motor for horizontal travel, pneumatic cylinders and a vacuum suction cup.',
+  b:['Read reed switches H0\u2013H4 and V0\u2013V4 to track gantry position and measure each disk\u2019s height before stacking','Designed the sequence as state machines covering startup, normal operation, emergency stop and re-initialisation','Wrote the logic in TIA Portal across LAD, FBD and STL, with a data block holding disk positions and stack heights','Tested in PLCSIM and ran it with an HMI, plus green, amber and red indicator lights and a buzzer'],
+  f:[['S7-1500','PLC platform'],['3','PLC languages used']],
+  tools:['Siemens S7-1500','TIA Portal','PLCSIM','HMI','Pneumatics']},
+ {a:'auto',code:'ENG252',t:'Smart home automation prototype',img:'smart-home.jpg',alt:'3D-printed model house with a PIR sensor on the roof, an ultrasonic sensor above the door and an ESP32 camera board',team:'Team of 3',
+  d:'Built a working smart home model controlled by an ESP32 and a Raspberry Pi: lights, fan, door and lock respond to sensors and can be run from a phone app over Wi-Fi.',
+  b:['Temperature-controlled fan using a high-accuracy MCP9808 sensor, and lights that dim with ambient light level','Security: PIR and ultrasonic sensors trigger a buzzer and an ESP32-CAM that sends photos as Telegram alerts','Face-recognition door lock running OpenCV on a Raspberry Pi, alongside a servo door that closes itself five minutes after opening and manual flip switches','Remote control through Sinric Pro and a phone app, with an activity log and a local web page charting temperature'],
+  f:[['ESP32','main controller'],['12 weeks','delivered on schedule']],
+  tools:['ESP32','Raspberry Pi','OpenCV','Arduino IDE','Sinric Pro','Telegram bot']},
+ {a:'auto',code:'Personal',t:'Pump automation for my family’s farm',
+  d:'Designed an ESP32 system to run 15 hp, 460 V three-phase irrigation pumps from soil-moisture readings, with remote control from a phone.',
+  b:['ESP32 isolated from the motor circuit through an optocoupler, relay driver and 24 V contactor coil','VFD start/stop and speed control from digital and analog I/O','Soil-moisture sensing per zone, with MQTT messages to a web dashboard'],
+  f:[['15 hp','three-phase motors'],['3','irrigation zones']],
+  tools:['ESP32','MQTT','VFD','Contactors']}
+];
+const skills=[
+ ['Power systems','DIgSILENT PowerFactory, PowerWorld, load flow, N-1/N-2 contingency, reactive compensation, transformer sizing, Western Power Technical Rules, transient stability, ANSI 50/51 protection, IEC 60909'],
+ ['Power electronics & drives','MATLAB Simulink, Simscape Electrical, AFE rectifiers, IGBT H-bridges, DC motor drives, braking choppers, multi-pulse rectifiers'],
+ ['Automation & control','Siemens S7-1500 and S7-1200, TIA Portal, PLCSIM, WinCC HMI, PROFINET, OPC UA, ladder, FBD, STL, ST and SFC, pneumatics, VSDs, PID, LabVIEW'],
+ ['Renewables & embedded','PVsyst, solar PV, battery storage, ESP32, ESP32-CAM, Raspberry Pi, Arduino, MQTT, Python, C, C++, OpenCV, AutoCAD']
+];
+
+const AN=['steel','stab','bess','net','ride','rect','water','ctrl','cascade','tune','tank','solar','drone','gantry','home','farm'];
+const areas=[
+ {id:'all',name:'All projects',sub:'Everything'},
+ {id:'ps',name:'Power systems',sub:'132 kV studies'},
+ {id:'pe',name:'Power electronics',sub:'Drives & converters'},
+ {id:'auto',name:'Automation',sub:'PLC, SCADA, IoT'},
+ {id:'ctrl',name:'Process control',sub:'Real rigs'},
+ {id:'ren',name:'Renewables & AI',sub:'Solar and thesis'}
+];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+P.forEach((p,i)=>{p.anim=AN[i];p.id=(p.code+'-'+p.t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48)});
+let cur='all';
+const feeds=document.getElementById('feeds'),grid=document.getElementById('grid'),count=document.getElementById('count');
+const view=document.getElementById('view'),vbody=document.getElementById('vbody');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+feeds.innerHTML=areas.map(a=>`<button class="feed" type="button" data-id="${a.id}" aria-pressed="${a.id===cur}">${esc(a.name)}<span>${esc(a.sub)}</span></button>`).join('');
+document.getElementById('skills').innerHTML=skills.map(s=>`<div><h3>${esc(s[0])}</h3><div class="tags">${s[1].split(', ').map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div></div>`).join('');
+const first=s=>{const m=s.match(/^.*?\.(\s|$)/);let t=m?m[0].trim():s;if(t.length>170){t=t.split(/:\s/)[0];if(!/\.$/.test(t))t+='.'}return t};
+const list=()=>P.filter(p=>cur==='all'||p.a===cur);
+const io=new IntersectionObserver(es=>{for(const e of es){const s=e.target.querySelector('svg');if(!s||!s.pauseAnimations)continue;if(e.isIntersecting&&!reduce)s.unpauseAnimations();else s.pauseAnimations()}},{rootMargin:'100px'});
+const render=()=>{
+ const L=list();
+ count.textContent=`${L.length} of ${P.length} shown`;
+ grid.innerHTML=L.length?L.map(p=>`<a class="card" href="#${p.id}" data-id="${p.id}"><div class="screen">${A(p.anim)}</div><div class="body"><div class="code">${esc(p.code)}${p.team?`<span class="team">${esc(p.team)}</span>`:''}</div><h3>${esc(p.t)}</h3><p>${esc(first(p.d))}</p><div class="open"><span><b>${esc(p.f[0][0])}</b> ${esc(p.f[0][1])}</span><span aria-hidden="true" style="white-space:nowrap">Open →</span></div></div></a>`).join(''):'<p class="empty">No projects in this area yet.</p>';
+ for(const b of feeds.children)b.setAttribute('aria-pressed',b.dataset.id===cur);
+ grid.querySelectorAll('.screen').forEach(s=>io.observe(s));
+ drawSld();
+};
+feeds.addEventListener('click',e=>{const b=e.target.closest('.feed');if(!b)return;cur=b.dataset.id;render();document.getElementById('projects').scrollIntoView({behavior:reduce?'auto':'smooth'})});
+const detail=p=>{
+ const L=list().length?list():P;
+ return `<div class="vscreen" id="vscreen">${A(p.anim)}</div>${p.video?`<div class="vvid"><video src="${esc(p.video)}" poster="${esc(p.poster)}" muted loop playsinline autoplay controls></video><span>Real footage from the lab</span></div>`:''}
+ <div class="vhead" style="margin-top:22px"><div class="code">${esc(p.code)}${p.team?`<span class="team">${esc(p.team)}</span>`:''}</div><h2 id="vt">${esc(p.t)}</h2><p>${esc(p.d)}</p></div>
+ <div class="vcols"><div><h3 style="margin-bottom:10px">What I did</h3><ul>${p.b.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="tags">${p.tools.map(x=>`<span class="tag2">${esc(x)}</span>`).join('')}</div></div>
+ <div><div class="facts">${p.f.map(x=>`<div class="fact"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>${p.img?`<figure class="real"><img src="${esc(p.img)}" alt="${esc(p.alt)}"><figcaption>From my report</figcaption></figure>`:''}</div></div>`;
+};
+let openId=null,lastCard=null;
+const vt=(fn)=>document.startViewTransition&&!reduce?document.startViewTransition(fn):fn();
+const openP=id=>{
+ const p=P.find(x=>x.id===id);if(!p)return closeP();
+ const card=grid.querySelector(`[data-id="${CSS.escape(id)}"] .screen`);
+ if(card&&!view.classList.contains('on'))card.style.viewTransitionName='hero';
+ lastCard=card;
+ vt(()=>{if(card)card.style.viewTransitionName='';vbody.innerHTML=detail(p);document.getElementById('vscreen').style.viewTransitionName='hero';view.classList.add('on');document.body.style.overflow='hidden';view.scrollTop=0});
+ openId=id;document.title=p.t+' – Gurkaran Singh';
+ setTimeout(()=>document.getElementById('close').focus({preventScroll:true}),30);
+};
+const closeP=()=>{
+ if(!view.classList.contains('on'))return;
+ const id=openId;openId=null;document.title='Gurkaran Singh – Portfolio';
+ vt(()=>{view.classList.remove('on');document.body.style.overflow='';vbody.innerHTML='';const c=grid.querySelector(`[data-id="${CSS.escape(id)}"] .screen`);if(c){c.style.viewTransitionName='hero';c.closest('.card').scrollIntoView({block:'center'})}}).finished?.then(()=>{grid.querySelectorAll('.screen').forEach(s=>s.style.viewTransitionName='')});
+ const c=grid.querySelector(`[data-id="${CSS.escape(id)}"]`);if(c)setTimeout(()=>c.focus({preventScroll:true}),60);
+};
+const route=()=>{const h=decodeURIComponent(location.hash.slice(1));if(P.some(p=>p.id===h))openP(h);else closeP()};
+addEventListener('hashchange',route);
+document.getElementById('close').addEventListener('click',()=>{history.pushState('',document.title,location.pathname+location.search);closeP()});
+const step=d=>{const L=list().length?list():P;let i=L.findIndex(p=>p.id===openId);i=(i+d+L.length)%L.length;location.hash=L[i].id};
+document.getElementById('prev').addEventListener('click',()=>step(-1));
+document.getElementById('next').addEventListener('click',()=>step(1));
+addEventListener('keydown',e=>{if(!view.classList.contains('on'))return;if(e.key==='Escape')document.getElementById('close').click();if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});
+const s=document.getElementById('svg'),fig=document.getElementById('fig');
+const drawSld=()=>{
+ const W=fig.clientWidth,H=fig.clientHeight,small=W<600;
+ const gap=10,cw=(W-gap*5)/6,xs=areas.map((a,i)=>i*(cw+gap)+cw/2);
+ const busY=small?H-22:H-70,sx=small?W/2:Math.min(W*0.5,W-60);
+ const ln='stroke="#8e9aa1" stroke-width="2" fill="none"';
+ let g=`<line x1="${sx}" y1="6" x2="${sx}" y2="${busY-(small?52:62)}" ${ln}/>`;
+ g+=`<text x="${sx+14}" y="18" font-size="13" fill="#9aa5ab" font-family="Source Sans 3,sans-serif">132 kV supply</text>`;
+ const ty=busY-(small?40:46);
+ g+=`<circle cx="${sx}" cy="${ty-10}" r="13" ${ln}/><circle cx="${sx}" cy="${ty+8}" r="13" ${ln}/>`;
+ g+=`<line x1="${sx}" y1="${ty+21}" x2="${sx}" y2="${busY}" ${ln}/>`;
+ if(!reduce)g+=`<line class="flow" x1="${sx}" y1="6" x2="${sx}" y2="${ty-23}" stroke="#ff5a45" stroke-width="3"/><line class="flow" x1="${sx}" y1="${ty+21}" x2="${sx}" y2="${busY}" stroke="#ff5a45" stroke-width="3"/>`;
+ g+=`<line x1="${small?16:xs[0]}" y1="${busY}" x2="${small?W-16:xs[5]}" y2="${busY}" stroke="#e8ecee" stroke-width="5"/>`;
+ if(!small){g+=`<text x="${xs[0]}" y="${busY-10}" font-size="13" fill="#9aa5ab" font-family="Source Sans 3,sans-serif">Main bus</text>`;
+  xs.forEach((x,i)=>{const on=areas[i].id===cur,c=on?'#ff5a45':'#8e9aa1';
+   g+=`<line x1="${x}" y1="${busY}" x2="${x}" y2="${H}" stroke="${c}" stroke-width="2"/>`;
+   g+=`<rect x="${x-8}" y="${busY+20}" width="16" height="16" fill="${on?'#ff5a45':'#161b1e'}" stroke="${c}" stroke-width="2"/>`;
+   if(on&&!reduce)g+=`<line class="flow" x1="${x}" y1="${busY+38}" x2="${x}" y2="${H}" stroke="#ff5a45" stroke-width="4"/>`;});}
+ s.innerHTML=g;
+};
+const ro=new ResizeObserver(drawSld);ro.observe(fig);
+document.getElementById('copy').addEventListener('click',async e=>{try{await navigator.clipboard.writeText('gurkaran21052003@gmail.com');e.target.textContent='Email copied'}catch(_){e.target.textContent='gurkaran21052003@gmail.com'}});
+document.getElementById('msb').innerHTML=A('msb');io.observe(document.getElementById('msb'));render();route();
+}
+</script>
+</body>
+</html>
