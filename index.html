@@ -125,6 +125,13 @@ a{color:inherit}
 @media(max-width:900px){.head{grid-template-columns:1fr}.cols,.vcols{grid-template-columns:1fr}}
 @media(max-width:600px){.who{flex-direction:column;align-items:flex-start}.me{width:96px;height:96px}.fig{height:110px}.feeds{grid-template-columns:repeat(2,minmax(0,1fr))}.row{grid-template-columns:1fr;gap:2px}.tb{grid-template-columns:auto minmax(0,1fr)}.vscreen{max-height:none}.facts{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:no-preference){.flow{stroke-dasharray:6 10;animation:f 1.6s linear infinite}@keyframes f{to{stroke-dashoffset:-32}}}
+.vch{margin-top:28px;border-left:3px solid var(--ok);padding:4px 0 4px 16px;max-width:860px}.vch p{margin:6px 0 0}
+.gh{margin:30px 0 12px}.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.gal figure{margin:0;background:var(--panel);border:1px solid var(--rule)}.gal .zoom{all:unset;display:block;cursor:zoom-in;background:#fff;aspect-ratio:4/3;width:100%}
+.gal .zoom:focus-visible{outline:2px solid var(--ok)}.gal img{width:100%;height:100%;object-fit:contain;display:block}
+.gal figcaption{color:var(--mute);font-size:13px;padding:7px 10px;line-height:1.4}
+.lb{position:fixed;inset:0;z-index:99;background:rgba(5,8,12,.94);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;cursor:zoom-out}
+.lb.on{display:flex}.lb img{max-width:100%;max-height:84vh;background:#fff}.lb p{color:#dfe6ee;margin:12px 0 0;text-align:center;max-width:900px}
 </style>
 </head>
 <body>
@@ -306,6 +313,52 @@ const P=[
   f:[['15 hp','three-phase motors'],['3','irrigation zones']],
   tools:['ESP32','MQTT','VFD','Contactors']}
 ];
+const EX=[
+ {ch:'The base network had an undervoltage of 0.89 p.u. at Bus 14. Rather than overbuild, I combined 1.05 p.u. taps on the Siskin and Crow transformers, a 15 MVAr capacitor at Bus 13 and a few targeted conductor upgrades. The upgraded system carries 800.5 MW and stays N-1 secure for $7.31M.',
+  f2:[['800.5 MW','load served after the upgrade'],['1.05 p.u.','transformer taps (limit 0.9–1.1)']],
+  g:[['g-537-fix.jpg','One outage case before reinforcement (left) and after (right): the red overload is gone']]},
+ {ch:'In the full network, a G2 trip and a Bus 3 fault showed weak frequency response. Adding dynamic control to G1 revealed the original dispatch had the slack machine absorbing 117.6 MW. Re-dispatching the battery so G1 generates 21.3 MW, with faster governor settings, kept every machine in step, and frequency held at about 0.98 p.u. with complete models.',
+  f2:[['117.6 MW','dispatch error found and fixed'],['0.98 p.u.','frequency after losing G2']],
+  g:[['g-534-relays.jpg','Time–current curves of the coordinated overcurrent relays'],['g-534-fault.jpg','Full-network dynamic responses: the generators stay in step']]},
+ {ch:'The network passed every steady-state check, but tripping the battery at full output broke the voltage-step limit. I reported the result honestly as conditional: secure for the N-0 and N-1 studies, but not fully compliant until a loss-of-battery reactive power and balancing strategy is added and the trip study is repeated.',
+  f2:[['\u00b196.8 MVAr','reactive range at 0.9 power factor'],['+1.23%','voltage step on energising (passed)']],
+  g:[['g-bess-net.jpg','The six-bus network in PowerFactory with load-flow results'],['g-bess-cont.jpg','Contingency analysis report: line and transformer loading for each case']]},
+ {ch:'Hand calculations and a single simulator can both hide mistakes, so I built the network twice, in MATLAB Simscape and in PowerWorld. Bus voltages agreed to about 0.001 p.u., and I traced the small differences to rounding.',
+  f2:[['0.001 p.u.','Simscape vs PowerWorld agreement'],['ACSR','conductor chosen from voltage-drop limits']],
+  g:[['g-381-model.jpg','The 8-bus network modelled in MATLAB Simscape'],['g-381-volt.jpg','Bus voltage profile from the load flow']]},
+ {ch:'When the ride slows down, the motors push energy back onto the DC bus: 11,562 J from the main platform and 1,137 J from each cabin. With nowhere to go, that would drive the bus voltage up. I sized 180 \u03a9, 3 kW braking choppers to clamp it at 700 V, and the emergency stop ramps all three motors to zero within 2.5 s from any state.',
+  f2:[['11,562 J','braking energy absorbed, main motor'],['650 V','regulated DC bus']],
+  g:[['g-535-profile.jpg','Speed profile the ride follows: accelerate, hold, reverse, stop'],['g-535-sim.jpg','Cabin motor over a full ride cycle: reference vs actual speed, torque and speed error'],['g-535-sim2.jpg','Main platform motor over the same cycle']]},
+ {ch:'Every output had to be built only from a fixed list of diodes and thyristors, so I used the fewest series devices that still cleared each peak inverse voltage. Two stages ended up below our own 80% derating target. I flagged that openly, with a fix (one extra series device), rather than calling the design safe.',
+  f2:[['15.4\u00b0–84.5\u00b0','thyristor firing-angle range'],['~1%','ripple in the 12-pulse version']],
+  g:[['g-382-sch.jpg','Circuit schematic of the rectifier stages']]},
+ {ch:'We split supervision from control. The S7-1500 handles the HMI, alarms and communications, while the S7-1200 runs pH, chlorination and pump sequencing. Keeping the process on its own PLC means the plant logic does not depend on the HMI side. The two talk over PROFINET using TSEND_C and TRCV_C blocks.',
+  f2:[['2 PID loops','pH and chlorine, with anti-windup'],['VSD','on the distribution pump']],
+  g:[['g-392-net.jpg','PROFINET network: both PLCs, drive, remote I/O and HMI in TIA Portal'],['g-392-scl.jpg','PID logic written in Structured Control Language (SCL)']]},
+ {ch:'Each controller was derived symbolically, then turned into a z-domain model for Simulink and a difference equation for LabVIEW. Dahlin looked good on paper but oscillated on the real rig, so I recommended against it until the model is refined. Deadbeat gave the fastest rise, but needs care on large steps where the valve can saturate.',
+  f2:[['K = 0.7','\u03c4 = 9.2 s, \u03b8 = 1.5 s'],['0.5 s','sample time']],
+  g:[['g-391-dsc.jpg','Direct synthesis: measured step response on the rig'],['g-391-dist.jpg','Disturbance rejection of all six controllers, measured on the rig'],['g-391-sim.jpg','Simulink model used to check each design first']]},
+ {ch:'The real rig never matches the model exactly. In every lab I ran the controller live in LabVIEW, compared the measured response with the Simulink prediction, and explained the difference.',
+  g:[['g-lab-panel.jpg','LabVIEW front panel used to run controllers live on the rig'],['g-lab-bd.jpg','LabVIEW block diagram behind it']]},
+ {ch:'The dead time (15 s) is about as long as the time constant (14.5 s), which makes aggressive tuning unstable. IMC handled this best. I also confirmed the closed loop was stable three ways: pole locations, root locus and the Routh-Hurwitz criterion.',
+  f2:[['K = 2.65','identified process gain'],['15 s','dead time']],
+  g:[['g-tw-rig.jpg','Measured on the rig: setpoint change from 40% to 50% (a) and disturbance rejection at 40% (b)'],['g-tw-rl.jpg','Root locus used to check stability'],['g-tw-sim.jpg','Simulink models comparing the three tunings']]},
+ {ch:'A model linearised at 50% only holds near 50%: the gain shifts from 2.44 at 30% to 4.19 at 70%. On the air receiver, adding 10 s of delay made the loop oscillate. A Smith predictor, which uses a model to predict the delayed output, made it stable again.',
+  f2:[['1.3 s','settling time, 50% to 70% level'],['2.44–4.19','process gain from 30% to 70% level']],
+  g:[['g-tank-level.jpg','Measured closed-loop level response, 50% to 70%'],['g-tank-flow.jpg','Model vs measured outflow across the tank height'],['g-tank-delay.jpg','Cascade loop with 2, 6 and 10 s delays: oscillation grows'],['g-tank-smith.jpg','Smith predictor brings the response back under control']]},
+ {ch:'Production ranged from 1,348.7 kWh in June to 3,764.4 kWh in December, and the performance ratio fell from about 82% in summer to 65% mid-winter. That drop is bigger than lower sunlight alone explains, which points to tree shading when the sun is low, plus soiling and the partly west-facing array.',
+  f2:[['30,901 kWh','produced in 2025'],['76.4%','annual performance ratio']],
+  g:[['g-231-site.jpg','The site: Kalgoorlie Library'],['g-231-sld.jpg','Single-line diagram of the PV system I drew'],['g-231-days.jpg','Best and worst days of 2025: 135.2 kWh on 21 Dec vs 9.2 kWh on 17 Apr'],['g-231-pr.jpg','PVsyst model: performance ratio by month']]},
+ {ch:'Field images are messy: changing light, angles and diseases that look alike. On soybean leaves, most errors came from three brown leaf-spot diseases that are hard to tell apart, which is why I am adapting a self-supervised DINOv2 backbone on unlabelled aerial images.',
+  g:[['g-470-plan.jpg','Project plan: planning through to model development']]},
+ {ch:'The PLC has to know where every disk is, even after an emergency stop. I stored disk positions and stack heights in a data block, and designed separate emergency-stop and re-initialisation states so the gantry returns to a known position before restarting.',
+  g:[['g-251-lad.jpg','Ladder logic reading the gantry position switches'],['g-251-db.jpg','Data block holding disk positions and stack heights']]},
+ {ch:'The ESP32 has to handle the app, sensors, camera alerts and manual switches at the same time. The switches are debounced, an app or switch command pauses automatic fan control for a minute so the two do not fight, and the fan uses a 1 \u00b0C gap between on and off so it does not chatter.',
+  f2:[['28 / 27 \u00b0C','fan on / off thresholds']],
+  g:[['g-252-build.jpg','The 3D-printed house during wiring'],['g-252-door.jpg','Servo door with the ultrasonic sensor above it'],['g-252-app.jpg','Phone app controlling lights, fan and lock'],['g-252-web.jpg','Local status page with temperature and recent events'],['g-252-flow.jpg','System flowchart']]},
+ {}
+];
+P.forEach((p,i)=>{const e=EX[i]||{};if(e.f2)p.f=p.f.concat(e.f2);p.ch=e.ch;p.g=e.g||[]});
 const skills=[
  ['Power systems','DIgSILENT PowerFactory, PowerWorld, load flow, N-1/N-2 contingency, reactive compensation, transformer sizing, Western Power Technical Rules, transient stability, ANSI 50/51 protection, IEC 60909'],
  ['Power electronics & drives','MATLAB Simulink, Simscape Electrical, AFE rectifiers, IGBT H-bridges, DC motor drives, braking choppers, multi-pulse rectifiers'],
@@ -347,7 +400,9 @@ const detail=p=>{
  return `<div class="vscreen" id="vscreen">${A(p.anim)}</div>${p.video?`<div class="vvid"><video src="${esc(p.video)}" poster="${esc(p.poster)}" muted loop playsinline autoplay controls></video><span>Real footage from the lab</span></div>`:''}
  <div class="vhead" style="margin-top:22px"><div class="code">${esc(p.code)}${p.team?`<span class="team">${esc(p.team)}</span>`:''}</div><h2 id="vt">${esc(p.t)}</h2><p>${esc(p.d)}</p></div>
  <div class="vcols"><div><h3 style="margin-bottom:10px">What I did</h3><ul>${p.b.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="tags">${p.tools.map(x=>`<span class="tag2">${esc(x)}</span>`).join('')}</div></div>
- <div><div class="facts">${p.f.map(x=>`<div class="fact"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>${p.img?`<figure class="real"><img src="${esc(p.img)}" alt="${esc(p.alt)}"><figcaption>From my report</figcaption></figure>`:''}</div></div>`;
+ <div><div class="facts">${p.f.map(x=>`<div class="fact"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>${p.img?`<figure class="real"><img src="${esc(p.img)}" alt="${esc(p.alt)}"><figcaption>From my report</figcaption></figure>`:''}</div></div>
+ ${p.ch?`<div class="vch"><h3>The hard part</h3><p>${esc(p.ch)}</p></div>`:''}
+ ${p.g.length?`<h3 class="gh">From the reports</h3><div class="gal">${p.g.map(x=>`<figure><button class="zoom" data-src="${esc(x[0])}" data-cap="${esc(x[1])}" aria-label="Enlarge: ${esc(x[1])}"><img src="${esc(x[0])}" alt="${esc(x[1])}" loading="lazy"></button><figcaption>${esc(x[1])}</figcaption></figure>`).join('')}</div>`:''}`;
 };
 let openId=null,lastCard=null;
 const vt=(fn)=>document.startViewTransition&&!reduce?document.startViewTransition(fn):fn();
@@ -397,6 +452,10 @@ const ro=new ResizeObserver(drawSld);ro.observe(fig);
 document.getElementById('copy').addEventListener('click',async e=>{try{await navigator.clipboard.writeText('gurkaran21052003@gmail.com');e.target.textContent='Email copied'}catch(_){e.target.textContent='gurkaran21052003@gmail.com'}});
 document.getElementById('msb').innerHTML=A('msb');io.observe(document.getElementById('msb'));render();route();
 }
+
+const lb=document.createElement('div');lb.className='lb';lb.innerHTML='<img alt=""><p></p>';document.body.appendChild(lb);
+document.addEventListener('click',e=>{const z=e.target.closest('.zoom');if(z){lb.querySelector('img').src=z.dataset.src;lb.querySelector('img').alt=z.dataset.cap;lb.querySelector('p').textContent=z.dataset.cap;lb.classList.add('on');e.preventDefault();return}if(e.target.closest('.lb'))lb.classList.remove('on')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('on')){lb.classList.remove('on');e.stopImmediatePropagation()}},true);
 </script>
 </body>
 </html>
