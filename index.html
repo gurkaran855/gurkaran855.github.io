@@ -262,6 +262,11 @@ const P=[
   b:['Outputs of 1500 V at 12 kW, a thyristor-controlled 200–2000 V at up to 25 kW, and 2 × 1100 V at 15 kW','Two three-winding transformers feeding 6-pulse bridges; firing angles from 15.4° to 84.5°','Series devices derated to 80%, with balancing resistors and RC snubbers on every arm','Flagged two stages that ran below the 80% derating target, with a documented fix, rather than calling them safe','Follow-on design: a 12-pulse star-delta version that cuts ripple from about 4.2% to about 1%'],
   f:[['54','semiconductors in total'],['4','outputs from one supply']],
   tools:['Rectifiers','Thyristors','Simulink']},
+ {a:'pe',code:'ENG382 · Project 2',t:'Multi-output converter with isolated high-voltage outputs',team:'Team of 3',img:'eng382-p2-sld.jpg',alt:'Single-line diagram of the multi-output converter system',
+  d:'Designed and simulated a converter that turns one 400 V three-phase supply into four regulated high-voltage DC outputs, two of them galvanically isolated through a compact 20 kHz transformer.',
+  b:['My part: choosing the topology, designing the power stages and building the Simulink model','A six-pulse diode rectifier feeds a shared 540 V DC bus; a damped LC filter cut bus ripple from 55 V to about 5 V peak-to-peak','A boost converter gives 1500 V at 12 kW, and a four-switch buck-boost tracks anywhere from 200 V to 2000 V (0.25 to 25 kW)','A third boost makes a regulated 1100 V bus; a full-bridge inverter and 20 kHz three-winding transformer then give two isolated 1100 V, 7.5 kW outputs that stack to 2200 V','Cascaded voltage and current PI control with feedforward on every converter; every device rated with at least 1.5× voltage margin'],
+  f:[['4 of 4','outputs meet spec in simulation'],['≤ 1.8%','error on every output'],['0.06%','ripple at 1500 V (limit 10%)'],['20 kHz','isolation transformer']],
+  tools:['Simulink','Boost / buck-boost','PI control','HF transformer']},
  {a:'auto',code:'ENG392',t:'SCADA control for a water treatment plant',img:'scada-hmi.jpg',alt:'WinCC HMI screen showing four tanks, pumps, pH and chlorine dosing controls',team:'Team of 4',
   d:'Built the control system for a four-tank water treatment plant on Siemens hardware: an S7-1500 master PLC for supervision, alarms and the HMI, and an S7-1200 slave PLC for the process.',
   b:['Interlocked pump sequencing for filling and draining, so no pump can run dry','PID control of pH and chlorination with anti-windup, and hysteresis to stop dosing pumps hunting','PLC-to-PLC data over PROFINET with TSEND_C/TRCV_C, plus OPC UA communication','WinCC HMI with live process view and alarm management; a VSD on the distribution pump for energy-efficient flow'],
@@ -332,6 +337,8 @@ const EX=[
  {ch:'Every output had to be built only from a fixed list of diodes and thyristors, so I used the fewest series devices that still cleared each peak inverse voltage. Two stages ended up below our own 80% derating target. I flagged that openly, with a fix (one extra series device), rather than calling the design safe.',
   f2:[['15.4\u00b0–84.5\u00b0','thyristor firing-angle range'],['~1%','ripple in the 12-pulse version']],
   g:[['g-382-sch.jpg','Circuit schematic of the rectifier stages']]},
+ {ch:'The first version stacked two boost converters on the same bus to make 2200 V, and linking them shorted the lower output to 0 V. Outputs in series need isolation, so I replaced them with one boost to an 1100 V bus, a full-bridge inverter and a 20 kHz three-winding transformer. Both outputs then held 1100 V, isolated, from a single controller.',
+  g:[['g-382b-volt.jpg','Output voltages tracking their references through the full test sequence'],['g-382b-hf.jpg','Full-bridge inverter driving the 20 kHz three-winding transformer'],['g-382b-tx.jpg','Transformer voltages: primary and both secondaries'],['g-382b-bb.jpg','Four-switch buck-boost for the 200–2000 V output'],['g-382b-model.jpg','Top-level Simulink model']]},
  {ch:'We split supervision from control. The S7-1500 handles the HMI, alarms and communications, while the S7-1200 runs pH, chlorination and pump sequencing. Keeping the process on its own PLC means the plant logic does not depend on the HMI side. The two talk over PROFINET using TSEND_C and TRCV_C blocks.',
   f2:[['2 PID loops','pH and chlorine, with anti-windup'],['VSD','on the distribution pump']],
   g:[['g-392-net.jpg','PROFINET network: both PLCs, drive, remote I/O and HMI in TIA Portal'],['g-392-scl.jpg','PID logic written in Structured Control Language (SCL)']]},
@@ -366,7 +373,7 @@ const skills=[
  ['Renewables & embedded','PVsyst, solar PV, battery storage, ESP32, ESP32-CAM, Raspberry Pi, Arduino, MQTT, Python, C, C++, OpenCV, AutoCAD']
 ];
 
-const AN=['steel','stab','bess','net','ride','rect','water','ctrl','cascade','tune','tank','solar','drone','gantry','home','farm'];
+const AN=['steel','stab','bess','net','ride','rect','mvc','water','ctrl','cascade','tune','tank','solar','drone','gantry','home','farm'];
 const areas=[
  {id:'all',name:'All projects',sub:'Everything'},
  {id:'ps',name:'Power systems',sub:'132 kV studies'},

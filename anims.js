@@ -50,6 +50,23 @@ ride(){ // top view of two-axis ride
  const cab=(x)=>`<g transform="translate(${x} 0)"><circle r="26" fill="#1b2124" stroke="#dfe5e8" stroke-width="1.6"/><g>${[0,45,90,135,180,225,270,315].map(a=>`<circle cx="${17*Math.cos(a*Math.PI/180)}" cy="${17*Math.sin(a*Math.PI/180)}" r="3" fill="#ff6a55"/>`).join('')}<animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="3s" repeatCount="indefinite"/></g></g>`;
  return `<g transform="translate(160 92)"><circle r="78" fill="none" stroke="#3a4448" stroke-dasharray="4 4"/><g><rect x="-74" y="-6" width="148" height="12" rx="6" fill="#2a3236" stroke="#8e9aa1"/>${cab(-60)}${cab(60)}<circle r="8" fill="#8e9aa1"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="9s" repeatCount="indefinite"/></g></g>
  ${T(10,18,'Main platform 8.414 kW')}${T(310,18,'Cabins 1.601 kW','end')}${T(10,172,'4-quadrant drives, AFE 650 V DC bus')}`;},
+mvc(){ // rectifier -> 540 V bus -> three converters -> four outputs, one isolated via 20 kHz transformer
+ const box=(x,y,w,h,s)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#1b2124" stroke="#5c676d"/>`+T(x+w/2,y+h/2+3,s,'middle');
+ const sq=`<path d="M0 0 h5 v-6 h5 v12 h5 v-6" stroke="#ffb14a" stroke-width="1.4" fill="none"><animateTransform attributeName="transform" type="translate" from="0 0" to="-10 0" dur=".5s" repeatCount="indefinite"/></path>`;
+ const r1='M64 90 H96',b1='M110 32 H142',b2='M110 90 H142',b3='M110 148 H142',o1='M188 32 H250',o2='M188 90 H250',o3='M188 148 H204',o4='M232 140 H250',o5='M232 156 H250';
+ return `<path d="M14 82 q5-8 10 0 t10 0 M14 90 q5-8 10 0 t10 0 M14 98 q5-8 10 0 t10 0" ${L}/>${T(10,72,'400 V 3φ')}
+ ${box(36,76,28,28,'AC/DC')}<path d="${r1}" ${L}/><line x1="104" y1="22" x2="104" y2="158" stroke="#dfe5e8" stroke-width="4"/>${T(96,172,'540 V bus','middle')}
+ <path d="M104 32 H142 M104 90 H142 M104 148 H142" ${L}/>
+ ${box(142,20,46,24,'Boost')}${box(142,78,46,24,'Buck-boost')}${box(142,136,46,24,'Boost')}
+ <path d="${o1} ${o2} ${o3}" ${L}/>
+ <circle cx="212" cy="148" r="8" ${L}/><circle cx="224" cy="140" r="8" ${L}/><circle cx="224" cy="156" r="8" ${L}/><path d="M232 140 H250 M232 156 H250" ${L}/>
+ <g transform="translate(196 128)">${sq}</g>${T(212,117,'20 kHz','middle')}
+ ${flow(r1,1.2,2)}${flow('M104 32 H142',1.4,2)}${flow('M104 90 H142',1.4,2)}${flow('M104 148 H142',1.4,2)}
+ ${flow(o1,1.6,3,'#5fd38d')}${flow(o2,1.6,3,'#5fd38d')}${flow(o4,1.2,2,'#5fd38d')}${flow(o5,1.2,2,'#5fd38d')}
+ ${T(254,35,'1500 V')}${T(254,160,'1100 V')}${T(254,144,'1100 V')}
+ <text x="254" y="93" font-size="9" fill="#8e9aa1" font-family="Source Sans 3,sans-serif">200 V<animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;.45;.5;.95;1" dur="6s" repeatCount="indefinite"/></text>
+ <text x="254" y="93" font-size="9" fill="#8e9aa1" font-family="Source Sans 3,sans-serif" opacity="0">2000 V<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.45;.5;.95;1" dur="6s" repeatCount="indefinite"/></text>
+ ${T(258,118,'isolated')}`;},
 rect(){ // 3-phase in, rectified out
  const ph=(k,c)=>`<path d="${fn(t=>52+22*Math.sin(t*Math.PI*8+k),0,320,200)}" stroke="${c}" stroke-width="1.6" fill="none"><animateTransform attributeName="transform" type="translate" from="0 0" to="-80 0" dur="2s" repeatCount="indefinite"/></path>`;
  const out=fn(t=>{let m=-1;for(let k=0;k<3;k++){m=Math.max(m,Math.abs(Math.sin(t*Math.PI*8+k*2.094)))}return 150-30*m},0,320,300);
